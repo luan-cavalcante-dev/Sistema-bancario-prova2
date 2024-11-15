@@ -5,21 +5,20 @@ public class Usuario {
 
 		// implementando os paramentos da classe pai usuario;
 	}
-
+    
+	private String nome;
+	private String email;
+    private int senha;
+    private int cpf;
+	
 	public String getNome() {
 		return nome;
-
 	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	private String nome;
-
-	private String email;
-	
-
+    
 	public String getEmail() {
 		return email;
 	}
@@ -28,18 +27,11 @@ public class Usuario {
 		this.email = email;
 	}
 
-
-	private int senha;
-
-	
 	public void setSenha(int senha) {
 		this.senha = senha;
 	}
 
-	private int cpf;
-
-
-	public int getCpf() {
+    public int getCpf() {
 		return cpf;
 	}
 
