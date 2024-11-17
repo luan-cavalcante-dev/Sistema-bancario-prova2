@@ -1,5 +1,7 @@
 package pessoas;
 
+import pessoas.enums.TipoUsuario;
+
 public class Usuario {
 	
 	// implementando parametros da classe pai usuario
