@@ -7,11 +7,14 @@ import java.util.Map;
 
 import dados.ArquivoTipo;
 import dados.GerenciaArquivos;
-import dados.estrutura.DataInterface;
+import dados.estrutura.SuperDataInterface;
+import pessoas.Bancario;
 import pessoas.Correntista;
+import pessoas.Gerente;
 import pessoas.Usuario;
+import pessoas.enums.TipoUsuario;
 
-public class UsuarioRepositorio extends GerenciaArquivos implements DataInterface<Usuario> {
+public class UsuarioRepositorio extends GerenciaArquivos implements SuperDataInterface<Usuario> {
 
     public UsuarioRepositorio() {
         super(ArquivoTipo.USUARIO);
@@ -33,6 +36,16 @@ public class UsuarioRepositorio extends GerenciaArquivos implements DataInterfac
         throw new UnsupportedOperationException("Unimplemented method 'findOne'");
     }
 
+    public Usuario findByEmailAndPassword(String email, int password){
+        List<Usuario> todos = findAll();
+        for (Usuario usuario : todos) {
+            if(usuario.getEmail().equals(email) && usuario.getSenha() == password){
+                return usuario;
+            }
+        }
+        throw new Error("Usuário não encontrado");
+    }
+
     @Override
     public void insert(Usuario entity) {
         List<Usuario> tudo = findAll();
@@ -52,12 +65,30 @@ public class UsuarioRepositorio extends GerenciaArquivos implements DataInterfac
 
     @Override
     public Usuario converte(Map<String,String> linha) {
-        Correntista usuario = new Correntista(
+        String tipo = linha.get("tipoUsuario");
+        if(tipo.toLowerCase() == TipoUsuario.BANCARIO.getTipo().toLowerCase()){
+            return new Bancario(
                 linha.get("nome"),
                 linha.get("email"),
                 Integer.parseInt(linha.get("senha")),
                 linha.get("cpf"));
-        return usuario;
+        }
+        if(tipo.toLowerCase() == TipoUsuario.GERENTE.getTipo().toLowerCase()){
+            return new Gerente(
+                linha.get("nome"),
+                linha.get("email"),
+                Integer.parseInt(linha.get("senha")),
+                linha.get("cpf"));
+        }
+        if(tipo.toLowerCase() == TipoUsuario.CORRENTISTA.getTipo().toLowerCase()){
+            return new Correntista(
+                linha.get("nome"),
+                linha.get("email"),
+                Integer.parseInt(linha.get("senha")),
+                linha.get("cpf"));
+        }
+
+        throw new Error("Tipo de Usuário desconhecido");
     }
 
     private String entidadeParaString(Usuario usuario) {
