@@ -1,5 +1,10 @@
 package pessoas;
 
-public class Bancario {
+public class Bancario  extends Usuario{
+	public Bancario(String nome, String email, int senha, int cpf) {
+		super(nome, email, senha, cpf, TipoUsuario.BANCARIO);
+	}
+	
+	
 
 }
