@@ -4,15 +4,15 @@ public class Contaprincipal {
 	
 	// implementando metados da conta pai 
 	
-	private String TipoDeconta;
-	private String CorrentistaTitular;
-	private double saldo;
+	private String TipoDaconta;
+	private TipoCorrentista CorrentistaTitular;
+	protected double saldo;
 	private int NumerodaConta;
 
 	// contruindo paramentros
-	public Contaprincipal (String CorrentistaTitular, String TipoDeconta, int Numerodaconta) {
+	public Contaprincipal (TipoCorrentista CorrentistaTitular, String TipoDeconta, int Numerodaconta) {
 		this.CorrentistaTitular = CorrentistaTitular;
-		this.TipoDeconta = TipoDeconta;
+		this.TipoDaconta = TipoDeconta;
 		this.NumerodaConta = Numerodaconta;
 		this.saldo = 0;
 			
@@ -37,6 +37,11 @@ public class Contaprincipal {
 		
 	}
 	
+	public void transferencia (Contaprincipal contaDestino, double valorasertransferido ) {
+		this.sacar(valorasertransferido);
+		contaDestino.depositar(valorasertransferido);
+	}
+	
 	
 	
 	
@@ -47,15 +52,15 @@ public class Contaprincipal {
 	
 	
 	public String getTipoDeconta() {
-		return TipoDeconta;
+		return TipoDaconta;
 	}
 	public void setTipoDeconta(String tipoDeconta) {
-		TipoDeconta = tipoDeconta;
+		TipoDaconta = tipoDeconta;
 	}
-	public String getCorrentistaTitular() {
+	public TipoCorrentista getCorrentistaTitular() {
 		return CorrentistaTitular;
 	}
-	public void setCorrentistaTitular(String correntistaTitular) {
+	public void setCorrentistaTitular(TipoCorrentista correntistaTitular) {
 		CorrentistaTitular = correntistaTitular;
 	}
 	public double getSaldo() {
