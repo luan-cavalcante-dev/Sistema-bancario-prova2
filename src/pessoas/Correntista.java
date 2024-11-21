@@ -1,11 +1,8 @@
 package pessoas;
 
-public class Correntista extends Usuario{
-	// implementando usuario da classe pai para a classe filho
-	public Correntista() {
-		super();
-		
-	}
-	
-
+import pessoas.enums.TipoUsuario;
+public class Correntista extends Usuario {
+    public Correntista(String nome, String email, int senha, String cpf){
+        super(nome, email, senha, cpf, TipoUsuario.CORRENTISTA);
+    }
 }

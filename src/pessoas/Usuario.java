@@ -1,11 +1,13 @@
 package pessoas;
 
+import pessoas.enums.TipoUsuario;
+
 public class Usuario {
 	
 	// implementando parametros da classe pai usuario
-	protected Usuario(String nome, String email, int senha, int cpf, TipoUsuario tipoUsuario) {
+	protected Usuario(String nome, String email, int senha, String cpf, TipoUsuario tipoUsuario) {
 		this.nome = nome;
-		this.email = email;
+        this.email = email;
 		this.senha = senha;
 		this.cpf = cpf;
 		this.tipoUsuario = tipoUsuario;
@@ -14,7 +16,7 @@ public class Usuario {
 	private String nome;
 	private String email;
     private int senha;
-	private int cpf;
+	private String cpf;
     private TipoUsuario tipoUsuario;
 	
 	public String getNome() {
@@ -33,15 +35,19 @@ public class Usuario {
 		this.email = email;
 	}
 
+	public int getSenha() {
+		return senha;
+	}
+
 	public void setSenha(int senha) {
 		this.senha = senha;
 	}
 
-    public int getCpf() {
+    public String getCpf() {
 		return cpf;
 	}
 
-	public void setCpf(int cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 	
