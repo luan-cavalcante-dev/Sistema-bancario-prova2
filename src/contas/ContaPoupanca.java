@@ -10,18 +10,6 @@ public class ContaPoupanca extends Contaprincipal {
 		this.periodoSemJuros = 0;
 		this.rendimentoMensal = 0.05;
 	}
-	public void calcularjuros(double juros) {
-		juros = saldo * rendimentoMensal * periodoSemJuros;
-		saldo += juros;
-		periodoSemJuros = 0;
-	}
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

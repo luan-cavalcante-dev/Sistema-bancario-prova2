@@ -14,15 +14,26 @@ public class CLIInterface {
     }
     private Scanner scan;
 
-    public Usuario loginUI() {
+    private String perguntaString(String questao){
+        System.out.println(questao);
+        return scan.next();
+    } 
+    private int perguntaInt(String questao){
+        System.out.println(questao);
+        return scan.nextInt();
+    } 
+    private double perguntaDouble(String questao){
+        System.out.println(questao);
+        return scan.nextDouble();
+    } 
 
+    public Usuario loginUI() {
         int tentativas = 0;
         int MAX_TENTATIVAS = 3;
         while (tentativas < MAX_TENTATIVAS) {
-            System.out.println("Digite o email:");
-            String emailTentativa = scan.nextLine();
-            System.out.println("Digite a senha:");
-            int senhaTentativa = scan.nextInt();
+            
+            String emailTentativa = perguntaString("Digite o email:");
+            int senhaTentativa = perguntaInt("Digite a senha:");
 
             UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
             try {
@@ -34,8 +45,8 @@ public class CLIInterface {
                 tentativas++;
             }
         }
-
-        throw new Error("Numero de tentativas excedidas, suas informações estão sendo coletadas para averiguação !!");
+        System.out.println("Numero de tentativas excedidas, suas informações estão sendo coletadas para averiguação !!");
+        return null;
     }
 
     public void menuUI(TipoUsuario tipo) {
@@ -55,7 +66,7 @@ public class CLIInterface {
             System.out.println("Opção inválida");
             return;
         }
-        menusAutorizados.get(opcao-1)
+        menusAutorizados.get(opcao-1);
         
 
     }
