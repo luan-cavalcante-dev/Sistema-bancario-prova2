@@ -12,6 +12,12 @@ public class ContaPoupanca extends Contaprincipal {
 	}
 
 	public void calculaJuros(){
+		if (periodoSemJuros >= 1){
+			double juros = saldo * rendimentoMensal;
+			saldo += juros;
+			periodoSemJuros = 0;
+		}
+		
 
 	}
 
