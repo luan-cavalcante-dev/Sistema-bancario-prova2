@@ -32,8 +32,13 @@ public class UsuarioRepositorio extends GerenciaArquivos implements SuperDataInt
 
     @Override
     public Usuario findOne(int codigo) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findOne'");
+        List<Usuario> todos = this.findAll();
+        for (Usuario usuario : todos) {
+            if(usuario.getCpf().equals(Integer.toString(codigo))){
+                return usuario;
+            }
+        }
+        return null;
     }
 
     public Usuario findByEmailAndPassword(String email, int password){
@@ -50,6 +55,10 @@ public class UsuarioRepositorio extends GerenciaArquivos implements SuperDataInt
     public void insert(Usuario entity) {
         List<Usuario> tudo = findAll();
         tudo.add(entity);
+        salvaEntidades(tudo);
+    }
+
+    public void salvaEntidades(List<Usuario> tudo){
         List<String> lista = new ArrayList<>();
         for (Usuario usuario : tudo) {
             lista.add(entidadeParaString(usuario));
@@ -59,8 +68,13 @@ public class UsuarioRepositorio extends GerenciaArquivos implements SuperDataInt
 
     @Override
     public void update(Usuario entity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        List<Usuario> tudo = findAll();
+        for (Usuario usuario : tudo) {
+            if(usuario.getCpf().equals(entity.getCpf())){
+                usuario = entity;
+            }
+        }
+        salvaEntidades(tudo);
     }
 
     @Override

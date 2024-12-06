@@ -6,35 +6,29 @@ public class ContaCorrenteAdcional extends Contaprincipal{
 		private double limite;
 		private int numeroDaContaPrincipal;
 		
-		
-		
-
-		public ContaCorrenteAdcional (String CorrentistaTitular, int Numerodaconta, double limite, int numeroDaContaPrincipal) {
-				super (TipoCorrentista.DEPENDENTE, "Conta corrente adicional", Numerodaconta);
-				this.limite = limite;
-				this.numeroDaContaPrincipal = numeroDaContaPrincipal;
-			
+		public ContaCorrenteAdcional(int numerodaConta, double saldo, String cpfTitular,
+				double limite, int numeroDaContaPrincipal) {
+			super(numerodaConta, saldo, cpfTitular, TipoConta.ADCIONAL);
+			this.limite = limite;
+			this.numeroDaContaPrincipal = numeroDaContaPrincipal;
 		}
-		
+
+
+
 		@Override
-		
 		public void sacar (double valor) {
 			if (valor <= 0) {
-				throw new IllegalArgumentException ("Valor para saque deve ser possitivo");
-		
+				throw new ErroBanco ("Valor para saque deve ser possitivo");
 			}
 			
 			if (saldo < valor && limite < valor) {
-				throw new IllegalArgumentException ("Saldo ou limite insuficiente");
-
+				throw new ErroBanco ("Saldo ou limite insuficiente");
 			}
-		
-		
-		
+			saldo -= valor;
 		}
 		
-		
-		
+
+
 		public int getNumeroDaContaPrincipal() {
 			return numeroDaContaPrincipal;
 		}
@@ -50,7 +44,4 @@ public class ContaCorrenteAdcional extends Contaprincipal{
 		public void setLimite(double limite) {
 			this.limite = limite;
 		}
-
-	
-
 }
