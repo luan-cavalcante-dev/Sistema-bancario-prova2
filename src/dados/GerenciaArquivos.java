@@ -59,18 +59,17 @@ public class GerenciaArquivos {
         HashMap<String, String> retorno = new HashMap<>();
 
         if (dados.length < 4) {
-            throw new Error(String.format("A linha não possui os 4 dados: &s\n", linha));
+            throw new Error(String.format("A linha não possui os 5 dados: &s\n", linha));
         }
 
         retorno.put("nome", dados[0]);
         retorno.put("email", dados[1]);
         retorno.put("senha", dados[2]);
         retorno.put("cpf", dados[3]);
+        retorno.put("tipoUsuario", dados[4]);
 
         return retorno;
     }
-
-
 
     private HashMap<String, String> deparaConta(String linha) {
         String[] dados = linha.split(";");
