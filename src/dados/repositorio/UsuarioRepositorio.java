@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import contas.ErroBanco;
 import dados.ArquivoTipo;
 import dados.GerenciaArquivos;
 import dados.estrutura.SuperDataInterface;
@@ -25,7 +26,7 @@ public class UsuarioRepositorio extends GerenciaArquivos implements SuperDataInt
         List<HashMap<String, String>> dadosCrus = pegaDados();
         ArrayList<Usuario> retorno = new ArrayList<Usuario>();
         for (HashMap<String,String> hashMap : dadosCrus) {
-            retorno.add(converte(hashMap));
+            retorno.add(converteMapParaEntidade(hashMap));
         }
         return retorno;
     }
@@ -48,7 +49,7 @@ public class UsuarioRepositorio extends GerenciaArquivos implements SuperDataInt
                 return usuario;
             }
         }
-        throw new Error("Usuário não encontrado");
+        throw new ErroBanco("Usuário não encontrado");
     }
 
     @Override
@@ -78,7 +79,7 @@ public class UsuarioRepositorio extends GerenciaArquivos implements SuperDataInt
     }
 
     @Override
-    public Usuario converte(Map<String,String> linha) {
+    public Usuario converteMapParaEntidade(Map<String,String> linha) {
         String tipo = linha.get("tipoUsuario");
         if(tipo.toLowerCase() == TipoUsuario.BANCARIO.getTipo().toLowerCase()){
             return new Bancario(
