@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import contas.ErroBanco;
+import contas.TipoConta;
+
 public class GerenciaArquivos {
     private ArquivoTipo arquivo;
 
@@ -70,7 +73,32 @@ public class GerenciaArquivos {
 
 
     private HashMap<String, String> deparaConta(String linha) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deparaConta'");
+        String[] dados = linha.split(";");
+        HashMap<String, String> retorno = new HashMap<>();
+
+        if (dados.length < 4) {
+            throw new Error(String.format("A linha não possui os 4 dados: &s\n", linha));
+        }
+
+        retorno.put("tipoDaconta", dados[0]);
+        retorno.put("numerodaConta", dados[1]);
+        retorno.put("saldo", dados[2]);
+        retorno.put("cpfTitular", dados[3]);
+
+        if (retorno.get("tipoDaconta").equalsIgnoreCase(TipoConta.CORRENTE.getTipo())) {
+            retorno.put("limitechequeEspecial", dados[4]);
+
+        } else if (retorno.get("tipoDaconta").equalsIgnoreCase(TipoConta.ADCIONAL.getTipo())) {
+            retorno.put("limite", dados[4]);
+            retorno.put("numeroDaContaPrincipal", dados[5]);
+            
+        }else if (retorno.get("tipoDaconta").equalsIgnoreCase(TipoConta.POUPANCA.getTipo())) {
+            // NÃO POSSUI CAMPOS ADCIONAIS !!
+
+        }else{
+            throw new ErroBanco("Tipo de conta inválido");
+        }
+
+        return retorno;
     }
 }

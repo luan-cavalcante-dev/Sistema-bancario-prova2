@@ -5,8 +5,8 @@ public class ContaPoupanca extends Contaprincipal {
 	private double rendimentoMensal;
 	private int periodoSemJuros; // numero do tempo de ultimo calculo de juros
 	
-	public ContaPoupanca(int numerodaConta, double saldo, String cpfTitular, TipoConta tipoDaconta) {
-		super(numerodaConta, saldo, cpfTitular, tipoDaconta);
+	public ContaPoupanca(int numerodaConta, double saldo, String cpfTitular) {
+		super(numerodaConta, saldo, cpfTitular, TipoConta.POUPANCA);
 		this.periodoSemJuros = 0;
 		this.rendimentoMensal = 0.05;
 	}
