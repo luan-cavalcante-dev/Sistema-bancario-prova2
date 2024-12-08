@@ -1,10 +1,7 @@
 package inicio;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import dados.ArquivoTipo;
-import dados.GerenciaArquivos;
 import pessoas.Usuario;
 
 public class Inicia {
@@ -14,13 +11,10 @@ public class Inicia {
         Scanner scan = new Scanner(System.in);
         
         CLIInterface cliInterface = new CLIInterface(scan);
+
+        cliInterface.roda();
         
-        Usuario usuario = cliInterface.loginUI();
         
-        if(usuario == null){
-            return;
-        }
-        cliInterface.menuUI(usuario.getTipoUsuario());
 
 
 
