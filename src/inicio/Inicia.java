@@ -2,8 +2,6 @@ package inicio;
 
 import java.util.Scanner;
 
-import pessoas.Usuario;
-
 public class Inicia {
     public static void main(String[] args) {
         System.out.println("Bem Vindo ao Sistema Bancário BML");

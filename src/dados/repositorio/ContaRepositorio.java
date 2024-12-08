@@ -14,7 +14,6 @@ import contas.TipoConta;
 import dados.ArquivoTipo;
 import dados.GerenciaArquivos;
 import dados.estrutura.SuperDataInterface;
-import pessoas.Usuario;
 
 public class ContaRepositorio extends GerenciaArquivos implements SuperDataInterface<Contaprincipal> {
 
@@ -83,7 +82,6 @@ public class ContaRepositorio extends GerenciaArquivos implements SuperDataInter
         if (tipo.equalsIgnoreCase(TipoConta.ADCIONAL.getTipo())) {
             return new ContaCorrenteAdcional(
                     Integer.parseInt(linha.get("numerodaConta")),
-                    Double.parseDouble(linha.get("saldo")),
                     linha.get("cpfTitular"),
                     Double.parseDouble(linha.get("limite")),
                     Integer.parseInt(linha.get("numeroDaContaPrincipal")));

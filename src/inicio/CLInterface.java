@@ -124,6 +124,9 @@ public class CLInterface {
             case MenuSistema.CADASTRAR_CONTA:
                 realizaCadastraContaUI();
                 break;
+            case MenuSistema.CONFIGURAR_LIMITE_ADCIONAL_CORRENTISTA:
+                configuraLimiteAdcionalCorrentistaUI();
+                break;
 
             default:
                 System.out.println("Opção inválida");
@@ -131,11 +134,32 @@ public class CLInterface {
         }
     }
 
+    private void configuraLimiteAdcionalCorrentistaUI() {
+        Contaprincipal conta = buscaConta();
+        if (conta == null || !conta.getCpfTitular().equals(usuarioLogado.getCpf())) {
+            System.out.println("Conta não encontrada");
+            return;
+        }
+        if (!(conta instanceof ContaCorrenteAdcional)) {
+            System.out.println("Conta não é Adcional");
+            return;
+        }
+
+        double novoLimite = perguntaDouble("Qual o novo limite?");
+        ContaCorrenteAdcional contaCorrenteAdcional = (ContaCorrenteAdcional) conta;
+        contaCorrenteAdcional.setLimite(novoLimite);
+        ContaRepositorio contaRepositorio = new ContaRepositorio();
+        contaRepositorio.update(contaCorrenteAdcional);
+
+        System.out.println("Limite alterado com sucesso");
+    }
+
     private void realizaCadastraContaUI() {
         int codigoConta = perguntaInt("Qual o CPF do titular?");
         UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
         Usuario usuario = usuarioRepositorio.findOne(codigoConta);
-        if(usuario == null || !usuario.getTipoUsuario().getTipo().equalsIgnoreCase(TipoUsuario.CORRENTISTA.getTipo())){
+        if (usuario == null
+                || !usuario.getTipoUsuario().getTipo().equalsIgnoreCase(TipoUsuario.CORRENTISTA.getTipo())) {
             System.out.println("Usuário nao encontrado");
             return;
         }
@@ -145,52 +169,54 @@ public class CLInterface {
         int opcao = scan.nextInt();
         scan.nextLine();
 
-
         ContaRepositorio contaRepositorio = new ContaRepositorio();
         int numeroDeConta = contaRepositorio.buscaProximoNumeroDeConta();
-        
+
         Contaprincipal novaConta;
-        if(opcao == 1){
+        if (opcao == 1) {
             double saldo = perguntaDouble("Qual o valor do saldo inicial?");
             novaConta = new ContaPoupanca(numeroDeConta, saldo, usuario.getCpf());
-        }else if(opcao == 2){
+        } else if (opcao == 2) {
             double limite = perguntaDouble("Qual o limite da conta adcional?");
             int numeroDeContaPrincipal = -1;
             for (Contaprincipal conta : contaRepositorio.buscaContaPorTitular(usuario.getCpf())) {
-                if(conta.getTipoDeconta().equals(TipoConta.CORRENTE)){
+                if (conta.getTipoDeconta().equals(TipoConta.CORRENTE)) {
                     numeroDeContaPrincipal = conta.getNumerodaConta();
                     break;
                 }
             }
-            if(numeroDeContaPrincipal == -1){
+            if (numeroDeContaPrincipal == -1) {
                 System.out.println("Nao foi possivel encontrar uma conta corrente");
                 return;
             }
-            // novaConta = new ContaCorrenteAdcional(numeroDeConta, saldo, usuario.getCpf(), limite, numeroDeContaPrincipal);            
-        }else{
+            novaConta = new ContaCorrenteAdcional(numeroDeConta, usuario.getCpf(), limite, numeroDeContaPrincipal);
+        } else {
             System.out.println("Opção inválida");
             return;
         }
 
-        // contaRepositorio.insert(novaConta);
+        contaRepositorio.insert(novaConta);
     }
 
     private void realizaTransferenciaCorrentistaUI() {
-        int numeroDaContaOrigem = perguntaInt("Qual o numero da conta de origem?");
-        ContaRepositorio contaRepositorio = new ContaRepositorio();
-        Contaprincipal contaOrigem = contaRepositorio.findOne(numeroDaContaOrigem);
+        System.out.println("Conta Origem");
+        Contaprincipal contaOrigem = buscaConta();
         if (contaOrigem == null || !contaOrigem.getCpfTitular().equals(usuarioLogado.getCpf())) {
             System.out.println("Conta nao encontrada");
             return;
         }
-        if (contaOrigem instanceof ContaPoupanca) {
-            System.out.println("Conta Poupanca nao pode realizar transferencias");
+        if (contaOrigem instanceof ContaPoupanca || contaOrigem instanceof ContaCorrenteAdcional) {
+            System.out.println("Conta Poupanca e Conta Adcional nao pode realizar transferencias");
             return;
         }
-        int numeroDaContaDestino = perguntaInt("Qual o numero da conta de destino?");
-        Contaprincipal contaDestino = contaRepositorio.findOne(numeroDaContaDestino);
+        System.out.println("Conta Destino");
+        Contaprincipal contaDestino = buscaConta();
         if (contaDestino == null) {
             System.out.println("Conta nao encontrada");
+            return;
+        }
+        if (contaDestino instanceof ContaCorrenteAdcional) {
+            System.out.println("Conta Adcional nao pode receber transferencias");
             return;
         }
         double valor = perguntaDouble("Digite o valor a ser transferido");
@@ -201,29 +227,27 @@ public class CLInterface {
             System.out.println(e.getMessage());
             return;
         }
+        ContaRepositorio contaRepositorio = new ContaRepositorio();
         contaRepositorio.update(contaOrigem);
         contaRepositorio.update(contaDestino);
         System.out.println("Transferencia realizada com sucesso");
     }
 
     private void realizaDepositoCorrentistaUI() {
-        int numeroDaConta = perguntaInt("Qual o numero da conta?");
-        ContaRepositorio contaRepositorio = new ContaRepositorio();
-        Contaprincipal conta = contaRepositorio.findOne(numeroDaConta);
+        Contaprincipal conta = buscaConta();
         if (conta == null || !conta.getCpfTitular().equals(usuarioLogado.getCpf())) {
             System.out.println("Conta nao encontrada");
             return;
         }
         double valor = perguntaDouble("Digite o valor a ser depositado");
         conta.depositar(valor);
+        ContaRepositorio contaRepositorio = new ContaRepositorio();
         contaRepositorio.update(conta);
         System.out.println("Deposito realizado com sucesso");
     }
 
     private void realizaSaqueCorrentistaUI() {
-        int numeroDaConta = perguntaInt("Qual o numero da conta?");
-        ContaRepositorio contaRepositorio = new ContaRepositorio();
-        Contaprincipal conta = contaRepositorio.findOne(numeroDaConta);
+        Contaprincipal conta = buscaConta();
         if (conta == null || !conta.getCpfTitular().equals(usuarioLogado.getCpf())) {
             System.out.println("Conta nao encontrada");
             return;
@@ -232,6 +256,10 @@ public class CLInterface {
         double valor = perguntaDouble("Digite o valor a ser sacado");
         try {
             conta.sacar(valor);
+            if (conta instanceof ContaCorrenteAdcional) {
+                conta = ((ContaCorrenteAdcional) conta).getContaPrincipal();
+            }
+            ContaRepositorio contaRepositorio = new ContaRepositorio();
             contaRepositorio.update(conta);
         } catch (ErroBanco e) {
             System.out.println("Nao foi possivel realizar o saque");
@@ -297,6 +325,9 @@ public class CLInterface {
             return;
         }
         ContaRepositorio contaRepositorio = new ContaRepositorio();
+        if (conta instanceof ContaCorrenteAdcional) {
+            conta = ((ContaCorrenteAdcional) conta).getContaPrincipal();
+        }
         contaRepositorio.update(conta);
         System.out.println("Saque realizado com sucesso");
     }

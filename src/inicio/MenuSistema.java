@@ -7,7 +7,9 @@ import pessoas.enums.TipoUsuario;
 
 public enum MenuSistema {
     CADASTRAR_CORRENTISTA("CADASTRAR CORRENTISTA", 
-        EnumSet.of(TipoUsuario.GERENTE)), 
+    EnumSet.of(TipoUsuario.GERENTE)), 
+    CADASTRAR_CONTA("CADASTRAR CONTA",
+        EnumSet.of(TipoUsuario.GERENTE)),
     CONFIGURAR_LIMITE_CONTA("CONFIGURAR LIMITE CONTA",
         EnumSet.of(TipoUsuario.GERENTE)),
     REALIZAR_SAQUE("REALIZAR SAQUE",
@@ -22,8 +24,8 @@ public enum MenuSistema {
         EnumSet.of(TipoUsuario.CORRENTISTA)),
     REALIZAR_TRANSFERENCIA_CORRENTISTA("REALIZAR TRANSFERENCIA",
         EnumSet.of(TipoUsuario.CORRENTISTA)),
-    CADASTRAR_CONTA("CADASTRAR CONTA",
-        EnumSet.of(TipoUsuario.GERENTE)),
+    CONFIGURAR_LIMITE_ADCIONAL_CORRENTISTA("CONFIGURAR LIMITE CONTA DE CONTA ADCIONAL",
+        EnumSet.of(TipoUsuario.CORRENTISTA)),
     ;
     
 
