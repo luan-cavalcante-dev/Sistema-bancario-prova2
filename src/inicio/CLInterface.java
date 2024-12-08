@@ -12,8 +12,8 @@ import pessoas.Correntista;
 import pessoas.Usuario;
 import pessoas.enums.TipoUsuario;
 
-public class CLIInterface {
-    public CLIInterface(Scanner scan) {
+public class CLInterface {
+    public CLInterface(Scanner scan) {
         this.scan = scan;
 
         // começa a UI

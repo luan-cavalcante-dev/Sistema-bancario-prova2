@@ -10,9 +10,9 @@ public class Inicia {
 
         Scanner scan = new Scanner(System.in);
         
-        CLIInterface cliInterface = new CLIInterface(scan);
+        CLInterface clInterface = new CLInterface(scan);
 
-        cliInterface.roda();
+        clInterface.roda();
         
         
 
