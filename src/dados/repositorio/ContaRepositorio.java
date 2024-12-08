@@ -61,9 +61,10 @@ public class ContaRepositorio extends GerenciaArquivos implements SuperDataInter
     @Override
     public void update(Contaprincipal entity) {
         List<Contaprincipal> tudo = findAll();
-        for (Contaprincipal conta : tudo) {
+        for (int i = 0; i < tudo.size(); i++) {
+            Contaprincipal conta = tudo.get(i);
             if(conta.getNumerodaConta() == entity.getNumerodaConta()){
-                conta = entity;
+                tudo.set(i, entity);
             }
         }
         salvaEntidades(tudo);
@@ -72,14 +73,14 @@ public class ContaRepositorio extends GerenciaArquivos implements SuperDataInter
     @Override
     public Contaprincipal converteMapParaEntidade(Map<String, String> linha) {
         String tipo = linha.get("tipoConta");
-        if (tipo.toLowerCase() == TipoConta.CORRENTE.getTipo().toLowerCase()) {
+        if (tipo.equalsIgnoreCase(TipoConta.CORRENTE.getTipo())) {
             return new ContaCorrenteprincipal(
                     Integer.parseInt(linha.get("numerodaConta")),
                     Double.parseDouble(linha.get("saldo")),
                     linha.get("cpfTitular"),
                     Double.parseDouble(linha.get("limitechequeEspecial")));
         }
-        if (tipo.toLowerCase() == TipoConta.ADCIONAL.getTipo().toLowerCase()) {
+        if (tipo.equalsIgnoreCase(TipoConta.ADCIONAL.getTipo())) {
             return new ContaCorrenteAdcional(
                     Integer.parseInt(linha.get("numerodaConta")),
                     Double.parseDouble(linha.get("saldo")),
@@ -87,7 +88,7 @@ public class ContaRepositorio extends GerenciaArquivos implements SuperDataInter
                     Double.parseDouble(linha.get("limite")),
                     Integer.parseInt(linha.get("numeroDaContaPrincipal")));
         }
-        if (tipo.toLowerCase() == TipoConta.POUPANCA.getTipo().toLowerCase()) {
+        if (tipo.equalsIgnoreCase(TipoConta.POUPANCA.getTipo())) {
             return new ContaPoupanca(
                     Integer.parseInt(linha.get("numerodaConta")),
                     Double.parseDouble(linha.get("saldo")),
@@ -102,11 +103,11 @@ public class ContaRepositorio extends GerenciaArquivos implements SuperDataInter
             return contaCorrenteParaString((ContaCorrenteprincipal) conta);
         }
         if (conta instanceof ContaCorrenteAdcional) {
-            contaAdcionalParaString((ContaCorrenteAdcional) conta);
+            return contaAdcionalParaString((ContaCorrenteAdcional) conta);
 
         }
         if (conta instanceof ContaPoupanca) {
-            contaPoupancaParaString((ContaPoupanca) conta);
+            return contaPoupancaParaString((ContaPoupanca) conta);
         }
         throw new ErroBanco("Tipo de Conta desconhecido");
     }
@@ -133,12 +134,34 @@ public class ContaRepositorio extends GerenciaArquivos implements SuperDataInter
     }
 
     private String contaPoupancaParaString(ContaPoupanca conta) {
-        String linha = String.format("%s;%s;%s;%s;%s",
+        String linha = String.format("%s;%s;%s;%s",
                 conta.getTipoDeconta(),
                 conta.getNumerodaConta(),
                 conta.getSaldo(),
                 conta.getCpfTitular());
 
         return linha;
+    }
+
+    public int buscaProximoNumeroDeConta() {
+        List<Contaprincipal> todas = findAll();
+        int maior = 0;
+        for (Contaprincipal conta : todas) {
+            if (conta.getNumerodaConta() > maior) {
+                maior = conta.getNumerodaConta();
+            }
+        }
+        return maior + 1;
+    }
+
+    public List<Contaprincipal> buscaContaPorTitular(String cpfTitular) {
+        List<Contaprincipal> todas = findAll();
+        List<Contaprincipal> retorno = new ArrayList<>();
+        for (Contaprincipal conta : todas) {
+            if (conta.getCpfTitular().equals(cpfTitular)) {
+                retorno.add(conta);
+            }
+        }
+        return retorno;
     }
 }

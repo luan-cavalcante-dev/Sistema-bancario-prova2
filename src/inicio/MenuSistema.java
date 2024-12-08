@@ -1,22 +1,31 @@
 package inicio;
 
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 import pessoas.enums.TipoUsuario;
 
 public enum MenuSistema {
-    CADASTRAR_CORRENTISTA("CADASTRAR_CORRENTISTA", 
+    CADASTRAR_CORRENTISTA("CADASTRAR CORRENTISTA", 
         EnumSet.of(TipoUsuario.GERENTE)), 
-    CONFIGURAR_LIMITE_CONTA("CONFIGURAR_LIMITE_CONTA",
+    CONFIGURAR_LIMITE_CONTA("CONFIGURAR LIMITE CONTA",
         EnumSet.of(TipoUsuario.GERENTE)),
-    REALIZAR_SAQUE("REALIZAR_SAQUE",
+    REALIZAR_SAQUE("REALIZAR SAQUE",
         EnumSet.of(TipoUsuario.BANCARIO, TipoUsuario.GERENTE)),
-    REALIZAR_DEPOSITO("REALIZAR_DEPOSITO",
+    REALIZAR_DEPOSITO("REALIZAR DEPOSITO",
         EnumSet.of(TipoUsuario.BANCARIO, TipoUsuario.GERENTE)),
-    REALIZAR_TRANSFERENCIA("REALIZAR_TRANSFERENCIA",
-        EnumSet.of(TipoUsuario.BANCARIO, TipoUsuario.GERENTE));
+    REALIZAR_TRANSFERENCIA("REALIZAR TRANSFERENCIA",
+        EnumSet.of(TipoUsuario.BANCARIO, TipoUsuario.GERENTE)),
+    REALIZAR_SAQUE_CORRENTISTA("REALIZAR SAQUE",
+        EnumSet.of(TipoUsuario.CORRENTISTA)),
+    REALIZAR_DEPOSITO_CORRENTISTA("REALIZAR DEPOSITO",
+        EnumSet.of(TipoUsuario.CORRENTISTA)),
+    REALIZAR_TRANSFERENCIA_CORRENTISTA("REALIZAR TRANSFERENCIA",
+        EnumSet.of(TipoUsuario.CORRENTISTA)),
+    CADASTRAR_CONTA("CADASTRAR CONTA",
+        EnumSet.of(TipoUsuario.GERENTE)),
+    ;
+    
 
     private Set<TipoUsuario> permissoes;
     private String nome;

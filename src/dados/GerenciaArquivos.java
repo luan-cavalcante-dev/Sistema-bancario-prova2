@@ -79,19 +79,19 @@ public class GerenciaArquivos {
             throw new Error(String.format("A linha não possui os 4 dados: &s\n", linha));
         }
 
-        retorno.put("tipoDaconta", dados[0]);
+        retorno.put("tipoConta", dados[0]);
         retorno.put("numerodaConta", dados[1]);
         retorno.put("saldo", dados[2]);
         retorno.put("cpfTitular", dados[3]);
 
-        if (retorno.get("tipoDaconta").equalsIgnoreCase(TipoConta.CORRENTE.getTipo())) {
+        if (retorno.get("tipoConta").equalsIgnoreCase(TipoConta.CORRENTE.getTipo())) {
             retorno.put("limitechequeEspecial", dados[4]);
 
-        } else if (retorno.get("tipoDaconta").equalsIgnoreCase(TipoConta.ADCIONAL.getTipo())) {
+        } else if (retorno.get("tipoConta").equalsIgnoreCase(TipoConta.ADCIONAL.getTipo())) {
             retorno.put("limite", dados[4]);
             retorno.put("numeroDaContaPrincipal", dados[5]);
             
-        }else if (retorno.get("tipoDaconta").equalsIgnoreCase(TipoConta.POUPANCA.getTipo())) {
+        }else if (retorno.get("tipoConta").equalsIgnoreCase(TipoConta.POUPANCA.getTipo())) {
             // NÃO POSSUI CAMPOS ADCIONAIS !!
 
         }else{

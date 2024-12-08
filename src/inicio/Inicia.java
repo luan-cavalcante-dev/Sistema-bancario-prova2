@@ -11,7 +11,6 @@ public class Inicia {
         Scanner scan = new Scanner(System.in);
         
         CLInterface clInterface = new CLInterface(scan);
-
         clInterface.roda();
         
         
