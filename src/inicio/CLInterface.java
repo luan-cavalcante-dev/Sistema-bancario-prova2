@@ -127,10 +127,24 @@ public class CLInterface {
             case MenuSistema.CONFIGURAR_LIMITE_ADCIONAL_CORRENTISTA:
                 configuraLimiteAdcionalCorrentistaUI();
                 break;
+            case MenuSistema.PROCESSAR_RENDIMENTO:
+                processaRendimento();
+                break;
 
             default:
                 System.out.println("Opção inválida");
                 break;
+        }
+    }
+
+    private void processaRendimento() {
+        ContaRepositorio contaRepositorio = new ContaRepositorio();
+        List<Contaprincipal> contas = contaRepositorio.findAll();
+        ArrayList<ContaPoupanca> contasPoupanca = new ArrayList<ContaPoupanca>();
+        for (Contaprincipal conta : contas) {
+            if(conta instanceof ContaPoupanca){
+                //@TODO filtra !!
+            }
         }
     }
 
