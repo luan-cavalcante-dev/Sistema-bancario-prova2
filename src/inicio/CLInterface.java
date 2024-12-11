@@ -142,11 +142,10 @@ public class CLInterface {
             case MenuSistema.BUSCAR_USUARIO:
                 buscaUsuarioUI();
                 break;
-
-            case MenuSistema.SAIR:
-                System.out.println("Finalizando Sistema...");
+            case MenuSistema.PROCESSAR_RENDIMENTO:
+                processaRendimento();
                 break;
-
+                
             default:
                 System.out.println("Opção inválida");
                 break;
@@ -274,6 +273,16 @@ public class CLInterface {
                     System.out.printf("%15s %15s %15s \n",
                             contaCP.getNumerodaConta(), contaCP.getSaldo(), contaCP.getCpfTitular());
                 }
+            }
+        }
+    }
+    private void processaRendimento() {
+        ContaRepositorio contaRepositorio = new ContaRepositorio();
+        List<Contaprincipal> contas = contaRepositorio.findAll();
+        ArrayList<ContaPoupanca> contasPoupanca = new ArrayList<ContaPoupanca>();
+        for (Contaprincipal conta : contas) {
+            if(conta instanceof ContaPoupanca){
+                //@TODO filtra !!
             }
         }
     }
