@@ -26,6 +26,17 @@ public enum MenuSistema {
         EnumSet.of(TipoUsuario.CORRENTISTA)),
     CONFIGURAR_LIMITE_ADCIONAL_CORRENTISTA("CONFIGURAR LIMITE CONTA DE CONTA ADCIONAL",
         EnumSet.of(TipoUsuario.CORRENTISTA)),
+    LISTAR_USUARIOS("LISTAR USUARIOS",
+        EnumSet.of(TipoUsuario.GERENTE)),
+    LISTAR_CONTAS("LISTAR CONTAS",
+        EnumSet.of(TipoUsuario.GERENTE)),
+    LISTAR_CONTAS_CORRENTISTA("LISTAR CONTAS",
+        EnumSet.of(TipoUsuario.CORRENTISTA)),
+    BUSCAR_CONTA("BUSCAR CONTA",
+        EnumSet.of(TipoUsuario.GERENTE)),
+    BUSCAR_USUARIO("BUSCAR USUARIO",
+        EnumSet.of(TipoUsuario.GERENTE)),
+    SAIR("SAIR", EnumSet.of(TipoUsuario.CORRENTISTA, TipoUsuario.GERENTE, TipoUsuario.BANCARIO))
     ;
     
 

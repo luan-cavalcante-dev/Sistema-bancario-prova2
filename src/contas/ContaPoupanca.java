@@ -17,7 +17,6 @@ public class ContaPoupanca extends Contaprincipal {
 			saldo += juros;
 			periodoSemJuros = 0;
 		}
-		
 
 	}
 

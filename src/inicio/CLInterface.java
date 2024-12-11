@@ -127,10 +127,154 @@ public class CLInterface {
             case MenuSistema.CONFIGURAR_LIMITE_ADCIONAL_CORRENTISTA:
                 configuraLimiteAdcionalCorrentistaUI();
                 break;
+            case MenuSistema.LISTAR_CONTAS:
+                mostraContasUI();
+                break;
+            case MenuSistema.LISTAR_CONTAS_CORRENTISTA:
+                // mostraContasCorrentistasUI();
+                break;
+            case MenuSistema.LISTAR_USUARIOS:
+                mostraUsuariosUI();
+                break;
+            case MenuSistema.BUSCAR_CONTA:
+                buscaContaUI();
+                break;
+            case MenuSistema.BUSCAR_USUARIO:
+                buscaUsuarioUI();
+                break;
+
+            case MenuSistema.SAIR:
+                System.out.println("Finalizando Sistema...");
+                break;
 
             default:
                 System.out.println("Opção inválida");
                 break;
+        }
+    }
+
+    private void buscaUsuarioUI() {
+        String cpf = perguntaString("Digite o CPF do Usuário");
+        UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+        List<Usuario> usuarios = usuarioRepositorio.findAll();
+        System.out.printf("%30s %15s %30s %30s \n", "Nome", "CPF", "Email", "Tipo de Usuário");
+        for (Usuario usuario : usuarios) {
+            if (usuario.getCpf().equals(cpf)) {
+                System.out.printf("%30s %15s %30s %30s \n", usuario.getNome(), usuario.getCpf(), usuario.getEmail(),
+                        usuario.getTipoUsuario());
+            }
+        }
+    }
+
+    private void buscaContaUI() {
+        String cpf = perguntaString("Digite o CPF do correntista");
+        ContaRepositorio contaRepositorio = new ContaRepositorio();
+        List<Contaprincipal> contas = contaRepositorio.findAll();
+        System.out.printf("%15s %15s %15s \n", "Tipo de Conta", "Numero da Conta", "CPF Titular");
+        for (Contaprincipal conta : contas) {
+            if (conta.getCpfTitular().equals(cpf)) {
+                System.out.printf("%15s %15s %15s \n",
+                        conta.getTipoDeconta(), conta.getNumerodaConta(), conta.getCpfTitular());
+            }
+        }
+    }
+
+    private void mostraUsuariosUI() {
+        System.out.println("Digite o tipo de usuário");
+        System.out.println("1 - Gerente");
+        System.out.println("2 - Bancário");
+        System.out.println("3 - Correntista");
+
+        int opcao = scan.nextInt();
+        scan.nextLine();
+        TipoUsuario[] opcoes = { TipoUsuario.GERENTE, TipoUsuario.BANCARIO, TipoUsuario.CORRENTISTA };
+
+        if (opcao < 1 || opcoes.length < opcao) {
+            System.out.println("Opção inválida");
+            return;
+        }
+        TipoUsuario selecionado = opcoes[opcao - 1];
+
+        UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+        List<Usuario> usuarios = usuarioRepositorio.findAll();
+        printHeaderUsuarios();
+        for (Usuario usuario : usuarios) {
+            if (usuario.getTipoUsuario().equals(selecionado)) {
+                printLinhaUsuario(usuario);
+            }
+        }
+    }
+
+    private void printLinhaUsuario(Usuario usuario) {
+        System.out.printf("%30s %30s %15s %15s \n",
+                usuario.getNome(), usuario.getEmail(), usuario.getCpf(), usuario.getTipoUsuario());
+    }
+
+    private void printHeaderUsuarios() {
+        System.out.printf("%30s %30s %15s %15s \n",
+                "Nome", "Email", "CPF", "TipoUsuario");
+    }
+
+    private void mostraContasUI() {
+        System.out.println("Digite o tipo de conta");
+        System.out.println("1 - Conta Corrente");
+        System.out.println("2 - Conta Corrente Adcional");
+        System.out.println("3 - Conta Poupanca");
+
+        int opcao = scan.nextInt();
+        scan.nextLine();
+
+        TipoConta[] opcoes = { TipoConta.CORRENTE, TipoConta.ADCIONAL, TipoConta.POUPANCA };
+
+        if (opcao < 1 || opcao > opcoes.length) {
+            System.out.println("Opção inválida");
+            return;
+        }
+        TipoConta selecionado = opcoes[opcao - 1];
+
+        ContaRepositorio contaRepositorio = new ContaRepositorio();
+        List<Contaprincipal> contas = contaRepositorio.findAll();
+        mostraLinhasContas(contas, selecionado);
+    }
+
+    private void mostraLinhasContas(List<Contaprincipal> contas, TipoConta selecionado) {
+
+        if (selecionado.equals(TipoConta.CORRENTE)) {
+            System.out.printf("%15s %15s %15s %15s \n",
+                    "Numero da Conta", "Saldo", "CPF Titular", "Cheque Especial");
+            for (Contaprincipal conta : contas) {
+                if (conta.getTipoDeconta().equals(selecionado)) {
+                    ContaCorrenteprincipal contaCP = (ContaCorrenteprincipal) conta;
+                    System.out.printf("%15s %15s %15s %15s \n",
+                            contaCP.getNumerodaConta(), contaCP.getSaldo(), contaCP.getCpfTitular(),
+                            contaCP.getLimitechequeEspecial());
+                }
+            }
+        }
+
+        if (selecionado.equals(TipoConta.ADCIONAL)) {
+            System.out.printf("%15s %15s %15s %15s \n",
+                    "Numero da Conta", "CPF Titular", "Limite", "Conta Principal");
+            for (Contaprincipal conta : contas) {
+                if (conta.getTipoDeconta().equals(selecionado)) {
+                    ContaCorrenteAdcional contaCP = (ContaCorrenteAdcional) conta;
+                    System.out.printf("%15s %15s %15s %15s \n",
+                            contaCP.getNumerodaConta(), contaCP.getCpfTitular(), contaCP.getLimite(),
+                            contaCP.getNumeroDaContaPrincipal());
+                }
+            }
+        }
+
+        if (selecionado.equals(TipoConta.POUPANCA)) {
+            System.out.printf("%15s %15s %15s \n",
+                    "Numero da Conta", "Saldo", "CPF Titular");
+            for (Contaprincipal conta : contas) {
+                if (conta.getTipoDeconta().equals(selecionado)) {
+                    ContaPoupanca contaCP = (ContaPoupanca) conta;
+                    System.out.printf("%15s %15s %15s \n",
+                            contaCP.getNumerodaConta(), contaCP.getSaldo(), contaCP.getCpfTitular());
+                }
+            }
         }
     }
 
@@ -389,7 +533,7 @@ public class CLInterface {
         do {
             MenuSistema itemMenuSelecionado = menuUI(usuario.getTipoUsuario());
             mostraUI(itemMenuSelecionado);
-        } while (perguntaString("Deseja continuar? (s ou n)").equalsIgnoreCase("s"));
+        } while (perguntaString("Deseja sair? (s ou n)").equalsIgnoreCase("n"));
     }
 
 }
