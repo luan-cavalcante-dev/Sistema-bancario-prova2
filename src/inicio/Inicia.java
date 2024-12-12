@@ -10,13 +10,8 @@ public class Inicia {
 
         Scanner scan = new Scanner(System.in);
         
-        // CLInterface clInterface = new CLInterface(scan);
-        // clInterface.roda();
-        
-        ContaPoupanca cp = new ContaPoupanca(1, 1000, "123.456.789-00");
-        cp.calculaJuros();
-        System.out.println(cp.getSaldo());
-
+        CLInterface clInterface = new CLInterface(scan);
+        clInterface.roda();
     }
 
     

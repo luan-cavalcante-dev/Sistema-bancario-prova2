@@ -38,6 +38,10 @@ public enum MenuSistema {
             EnumSet.of(TipoUsuario.GERENTE)),
     PROCESSAR_RENDIMENTO("PROCESSAR O RENDIMENTO DAS CONTAS POUPANÇAS",
             EnumSet.of(TipoUsuario.GERENTE)),
+    SIMULAR_RENDIMENTO("SIMULAR O RENDIMENTO DE CONTA POUPANÇA",
+            EnumSet.of(TipoUsuario.GERENTE)),
+    SAIR("SAIR",
+            EnumSet.of(TipoUsuario.GERENTE, TipoUsuario.BANCARIO, TipoUsuario.CORRENTISTA)),
     ;
 
     private Set<TipoUsuario> permissoes;

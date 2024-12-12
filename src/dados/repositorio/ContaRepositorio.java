@@ -111,7 +111,7 @@ public class ContaRepositorio extends GerenciaArquivos implements SuperDataInter
     }
 
     private String contaCorrenteParaString(ContaCorrenteprincipal conta) {
-        String linha = String.format("%s;%s;%s;%s;%s",
+        String linha = String.format("%s;%s;%.2f;%s;%s",
                 conta.getTipoDeconta(),
                 conta.getNumerodaConta(),
                 conta.getSaldo(),
@@ -121,7 +121,7 @@ public class ContaRepositorio extends GerenciaArquivos implements SuperDataInter
     }
 
     private String contaAdcionalParaString(ContaCorrenteAdcional conta) {
-        String linha = String.format("%s;%s;%s;%s;%s;%s",
+        String linha = String.format("%s;%s;%.2f;%s;%s;%s",
                 conta.getTipoDeconta(),
                 conta.getNumerodaConta(),
                 conta.getSaldo(),
@@ -132,7 +132,7 @@ public class ContaRepositorio extends GerenciaArquivos implements SuperDataInter
     }
 
     private String contaPoupancaParaString(ContaPoupanca conta) {
-        String linha = String.format("%s;%s;%s;%s",
+        String linha = String.format("%s;%s;%.2f;%s",
                 conta.getTipoDeconta(),
                 conta.getNumerodaConta(),
                 conta.getSaldo(),

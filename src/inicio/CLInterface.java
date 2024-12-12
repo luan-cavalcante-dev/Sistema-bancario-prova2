@@ -25,6 +25,7 @@ public class CLInterface {
 
     private Scanner scan;
     private Usuario usuarioLogado;
+    private boolean sair;
 
     private String perguntaString(String questao) {
         System.out.println(questao);
@@ -131,7 +132,7 @@ public class CLInterface {
                 mostraContasUI();
                 break;
             case MenuSistema.LISTAR_CONTAS_CORRENTISTA:
-                // mostraContasCorrentistasUI();
+                mostraContasCorrentistasUI();
                 break;
             case MenuSistema.LISTAR_USUARIOS:
                 mostraUsuariosUI();
@@ -143,13 +144,40 @@ public class CLInterface {
                 buscaUsuarioUI();
                 break;
             case MenuSistema.PROCESSAR_RENDIMENTO:
-                processaRendimento();
+                processaRendimentoUI();
                 break;
-                
+            case MenuSistema.SIMULAR_RENDIMENTO:
+                simulaRendimentoUI();
+                break;
+
             default:
                 System.out.println("Opção inválida");
-                break;
+            case MenuSistema.SAIR:
+                sair = true;
         }
+    }
+
+    private void mostraContasCorrentistasUI() {
+        ContaRepositorio contaRepositorio = new ContaRepositorio();
+        List<Contaprincipal> contas = contaRepositorio.findAll();
+        for (Contaprincipal conta : contas) {
+            if(usuarioLogado.getCpf().equals(conta.getCpfTitular())){
+                System.out.printf("\n%15s %15.2f \n\n", conta.getTipoDeconta().getTipo(), conta.getSaldo());
+            }
+        }
+    }
+
+    private void simulaRendimentoUI() {
+        Contaprincipal conta = buscaConta();
+        if (!(conta instanceof ContaPoupanca)) {
+            System.out.println("Esta conta não é Poupanca");
+            return;
+        }
+        int meses = perguntaInt("Simular rendimento por quantos meses?");
+        ContaPoupanca contaPoupanca = (ContaPoupanca) conta;
+        double valorEstimado = contaPoupanca.simulaRendimento(meses);
+        System.out.printf("Hoje o saldo é %.2f, em %d meses o saldo será %.2f\n", contaPoupanca.getSaldo(), meses,
+                valorEstimado);
     }
 
     private void buscaUsuarioUI() {
@@ -244,7 +272,7 @@ public class CLInterface {
             for (Contaprincipal conta : contas) {
                 if (conta.getTipoDeconta().equals(selecionado)) {
                     ContaCorrenteprincipal contaCP = (ContaCorrenteprincipal) conta;
-                    System.out.printf("%15s %15s %15s %15s \n",
+                    System.out.printf("%15s %15.2f %15s %15s \n",
                             contaCP.getNumerodaConta(), contaCP.getSaldo(), contaCP.getCpfTitular(),
                             contaCP.getLimitechequeEspecial());
                 }
@@ -270,19 +298,21 @@ public class CLInterface {
             for (Contaprincipal conta : contas) {
                 if (conta.getTipoDeconta().equals(selecionado)) {
                     ContaPoupanca contaCP = (ContaPoupanca) conta;
-                    System.out.printf("%15s %15s %15s \n",
+                    System.out.printf("%15s %15.2f %15s \n",
                             contaCP.getNumerodaConta(), contaCP.getSaldo(), contaCP.getCpfTitular());
                 }
             }
         }
     }
-    private void processaRendimento() {
+
+    private void processaRendimentoUI() {
         ContaRepositorio contaRepositorio = new ContaRepositorio();
         List<Contaprincipal> contas = contaRepositorio.findAll();
-        ArrayList<ContaPoupanca> contasPoupanca = new ArrayList<ContaPoupanca>();
         for (Contaprincipal conta : contas) {
-            if(conta instanceof ContaPoupanca){
-                //@TODO filtra !!
+            if (conta instanceof ContaPoupanca) {
+                ((ContaPoupanca) conta).atualizaSaldoComRendimento();
+                contaRepositorio.update(conta);
+                System.out.printf("Saldo da poupança %s atualizado\n", conta.getNumerodaConta());
             }
         }
     }
@@ -542,7 +572,7 @@ public class CLInterface {
         do {
             MenuSistema itemMenuSelecionado = menuUI(usuario.getTipoUsuario());
             mostraUI(itemMenuSelecionado);
-        } while (perguntaString("Deseja sair? (s ou n)").equalsIgnoreCase("n"));
+        } while (!sair);
     }
 
 }
